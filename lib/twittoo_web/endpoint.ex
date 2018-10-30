@@ -2,6 +2,7 @@ defmodule TwittooWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :twittoo
 
   socket "/socket", TwittooWeb.UserSocket
+  socket "/tweet", TwittooWeb.TweetSocket
 
   # Serve at "/" the static files from "priv/static" directory.
   #

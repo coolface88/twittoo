@@ -1,8 +1,8 @@
-defmodule TwittooWeb.UserSocket do
+defmodule TwittooWeb.TweetSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "room:*", TwittooWeb.RoomChannel
+  channel "tweet:*", TwittooWeb.TweetChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

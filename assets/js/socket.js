@@ -5,7 +5,7 @@
 // and connect at the socket path in "lib/web/endpoint.ex":
 import {Socket} from "phoenix"
 
-let socket = new Socket("/socket", {params: {token: window.userToken}})
+let socket = new Socket("/tweet", {params: {token: window.userToken}})
 
 // When you connect, you'll often need to authenticate the client.
 // For example, imagine you have an authentication plug, `MyAuth`,
@@ -54,9 +54,30 @@ let socket = new Socket("/socket", {params: {token: window.userToken}})
 socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
-let channel = socket.channel("topic:subtopic", {})
+let channel = socket.channel("tweet:", {})
+
+let tweetbtn = document.getElementById("tweetbtn").addEventListener("click", function(){
+    channel.push("new_msg", {body: document.getElementById('txtarea').value})
+    document.getElementById('txtarea').value = ""
+});
+
+let messagesContainer = document.getElementById("tweetmsg")
+
+channel.on("new_msg", payload => {
+  let messageItem = document.createElement("li")
+  messageItem.innerText = `[${Date()}] ${payload.body}`
+  messagesContainer.appendChild(messageItem)
+})
+
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
+
+  function postTweet (textInput){
+    if (textInput != ""){
+      channel.push("new_message", {body: textInput});
+      console.log("sdsbjsd skdjfsjdkbg sjdbgdjfhg");
+    }
+  }
 
 export default socket
