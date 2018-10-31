@@ -1,5 +1,6 @@
 defmodule TwittooWeb.TweetChannel do
   use Phoenix.Channel
+  alias TweetContext.Tweet, as: Tweet
   require Logger
 
   def join("tweet:", _message, socket) do
@@ -11,7 +12,10 @@ defmodule TwittooWeb.TweetChannel do
 
   def handle_in("new_msg", %{"body" => body}, socket) do
     Logger.info  "Logging this text"
+    Tweet.store_tweet body
     broadcast! socket, "new_msg", %{body: body}
-    {:noreply, socket}
+    response = Phoenix.View.render(TwittooWeb.TweetView, "tweetsnippet.html")
+    #response = %{body => "hung hahahahaha"}
+    #{:reply, {:ok, response}, socket}
   end
 end

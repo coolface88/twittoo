@@ -61,23 +61,17 @@ let tweetbtn = document.getElementById("tweetbtn").addEventListener("click", fun
     document.getElementById('txtarea').value = ""
 });
 
-let messagesContainer = document.getElementById("tweetmsg")
+let messagesContainer = document.getElementById("tweet-panel")
 
 channel.on("new_msg", payload => {
-  let messageItem = document.createElement("li")
-  messageItem.innerText = `[${Date()}] ${payload.body}`
-  messagesContainer.appendChild(messageItem)
+  //let messageItem = document.createElement("li")
+  //messageItem.innerText = `[${Date()}] ${payload.body}`
+  let innerTxt = `${payload.body}`
+  messagesContainer.appendChild(innerTxt)
 })
 
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
-
-  function postTweet (textInput){
-    if (textInput != ""){
-      channel.push("new_message", {body: textInput});
-      console.log("sdsbjsd skdjfsjdkbg sjdbgdjfhg");
-    }
-  }
 
 export default socket
