@@ -14,8 +14,9 @@ defmodule TwittooWeb.TweetChannel do
     Logger.info  "Logging this text"
     Tweet.store_tweet body
     broadcast! socket, "new_msg", %{body: body}
-    response = Phoenix.View.render(TwittooWeb.TweetView, "tweetsnippet.html")
+    #response = Phoenix.View.render(TwittooWeb.TweetView, "tweetsnippet.html", %{})
     #response = %{body => "hung hahahahaha"}
     #{:reply, {:ok, response}, socket}
+    {:noreply, socket}
   end
 end
