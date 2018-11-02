@@ -3,26 +3,27 @@ defmodule Twittoo.Ets do
   require Logger
 
   ## Server
-  def init(stack) do
-    :ets.new(:tweet_table, [:set, :named_table, :public])
-    Logger.info "tweet_table created"
-    :ets.new(:retweet_table, [:set, :named_table, :public])
-    Logger.info "retweet_table created"
-    {:ok, stack}
+  def init(state) do
+    :ets.new(:tweet_kv, [:set, :named_table, :public])
+    Logger.info "tweet_kv created"
+    :ets.new(:number_of_retweet_kv, [:set, :named_table, :public])
+    Logger.info "number_of_retweet_kv created"
+    {:ok, state}
   end
 
-  def start_link(state) do
+  def start_link(args) do
     #:ets.new(:tweet_table, [:set, :named_table, :public])
-    GenServer.start_link(__MODULE__, state, name: __MODULE__)
+    GenServer.start_link(__MODULE__, args, name: __MODULE__)
     Logger.info "ets process started"
   end
 
   def handle_call(request, _from, _state) do
-    :ets.insert(:tweet_table, {request})
+    Logger.info "ets insert request"
+    {:noreply, :ets.insert(:tweet_table, {request})}
   end
 
   def put(msg) do
-    GenServer.call(MyEts, msg)
+    GenServer.call(__MODULE__, msg)
   end
 
 end

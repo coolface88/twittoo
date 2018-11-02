@@ -56,6 +56,8 @@ socket.connect()
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("tweet:", {})
 
+let retweet_channel = socket.channel("retweet:", {})
+
 let tweetbtn = document.getElementById("tweetbtn").addEventListener("click", function(){
     channel.push("new_msg", {body: document.getElementById('txtarea').value})
     document.getElementById('txtarea').value = ""
@@ -71,6 +73,10 @@ channel.on("new_msg", payload => {
 })
 
 channel.join()
+  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join", resp) })
+
+retweet_channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
 

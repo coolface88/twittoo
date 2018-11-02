@@ -1,4 +1,4 @@
-defmodule TweetContext.Tweet do
+defmodule RetweetContext.Retweet do
   require UUID
   require Logger
   require DateTime

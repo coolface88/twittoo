@@ -7,8 +7,10 @@ defmodule Twittoo.Application do
     import Supervisor.Spec
 
     # Define workers and child supervisors to be supervised
-    children = [
 
+     DynamicSup.start_link([])
+     DynamicSup.start_child
+    children = [
       # Start the Ecto repository
       supervisor(Twittoo.Repo, []),
       # Start the endpoint when the application starts
@@ -19,7 +21,6 @@ defmodule Twittoo.Application do
       #  id: Twittoo.Ets,
       #  start: {Twittoo.Ets, :start_link, [[:hello]]},
       # }
-      Twittoo.MySupervisor
     ]
 
     #Twittoo.Ets.start_link()
@@ -27,7 +28,7 @@ defmodule Twittoo.Application do
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Twittoo.Supervisor]
     Supervisor.start_link(children, opts)
-
+    #Twittoo.Ets.start_link
 
   end
 
