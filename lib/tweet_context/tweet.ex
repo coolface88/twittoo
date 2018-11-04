@@ -1,17 +1,14 @@
 defmodule TweetContext.Tweet do
-  require UUID
   require Logger
   require DateTime
   alias Twittoo.Ets, as: Ets
 
   def store_tweet(tweet) do
-    Logger.info tweet
-    uuid = UUID.uuid1()
-    list = [msg: tweet, uuid: uuid]
-    result = JSON.encode(list)
-    t = {uuid,tweet}
+    Logger.info "::TweeContext.Tweet.store_tweet "
+    t = {:insert, "tweet_kv", tweet}
     Ets.put(t)
-
+    b = {:insert, "number_of_retweet_kv", tweet}
+    Ets.put(b)
   end
 
 end

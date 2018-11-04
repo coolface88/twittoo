@@ -1,6 +1,7 @@
 defmodule Twittoo.Ets do
   use GenServer, id: Twittoo.Ets
   require Logger
+  require UUID
 
   ## Server
   def init(state) do
@@ -18,8 +19,25 @@ defmodule Twittoo.Ets do
   end
 
   def handle_call(request, _from, _state) do
-    Logger.info "ets insert request"
-    {:noreply, :ets.insert(:tweet_table, {request})}
+    Logger.info "genserver handle_call callback in"
+    case request do
+      {:insert, table, msg} ->
+        {:reply, {self(), :tweet}, insert(table, msg)}
+      {:lookup, table, key} ->
+        {:reply, {self(), :tweet}, lookup(table, key)}
+      {_,_} -> Logger.info "handle_call unmatched any cases"
+    end
+  end
+
+  defp insert(table, msg) do
+    key = UUID.uuid1()
+    :ets.insert(String.to_atom(table), {key, msg})
+    Logger.info "genserver handle_call -> ets:insert into " <>table<> " table with key:value " <> key <> " : " <> msg
+  end
+
+  defp lookup(table, key) do
+    :ets.lookup(String.to_atom(table), key)
+    Logger.info "genserver handle_call -> ets:lookup into " <>table<> " table with key: " <> key
   end
 
   def put(msg) do
