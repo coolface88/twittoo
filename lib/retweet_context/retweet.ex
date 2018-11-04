@@ -4,14 +4,15 @@ defmodule RetweetContext.Retweet do
   require DateTime
   alias Twittoo.Ets, as: Ets
 
-  def store_tweet(tweet) do
-    Logger.info tweet
-    uuid = UUID.uuid1()
-    list = [msg: tweet, uuid: uuid]
-    result = JSON.encode(list)
-    t = {uuid,tweet}
+  def increase_retweet_counter(key) do
+    t = {:update_counter, "number_of_retweet_kv", key}
     Ets.put(t)
-
+    c = {:update_counter, "number_of_retweet_kv", key}
+    Ets.put(c)
+    d = {:update_counter, "number_of_retweet_kv", key}
+    Ets.put(d)
+    e = {:update_counter, "number_of_retweet_kv", key}
+    Ets.put(e)
   end
 
 end

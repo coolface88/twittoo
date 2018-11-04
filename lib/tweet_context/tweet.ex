@@ -5,10 +5,17 @@ defmodule TweetContext.Tweet do
 
   def store_tweet(tweet) do
     Logger.info "::TweeContext.Tweet.store_tweet "
-    t = {:insert, "tweet_kv", tweet}
+    key = UUID.uuid1()
+    t = {:insert, "tweet_kv", key, tweet}
     Ets.put(t)
-    b = {:insert, "number_of_retweet_kv", tweet}
-    Ets.put(b)
+    r = {:insert_counter, "number_of_retweet_kv", key, "0"}
+    Ets.put(r)
+    c = {:update_counter, "number_of_retweet_kv", key}
+    Ets.put(c)
+    d = {:update_counter, "number_of_retweet_kv", key}
+    Ets.put(d)
+    e = {:update_counter, "number_of_retweet_kv", key}
+    Ets.put(e)
   end
 
 end
