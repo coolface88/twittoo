@@ -5,9 +5,9 @@ defmodule Twittoo.Ets do
 
   ## Server
   def init(state) do
-    :ets.new(:tweet_kv, [:set, :named_table, :public])
+    :ets.new(:tweet_kv, [:ordered_set, :named_table, :public])
     Logger.info "tweet_kv created"
-    :ets.new(:number_of_retweet_kv, [:set, :named_table, :public])
+    :ets.new(:number_of_retweet_kv, [:ordered_set, :named_table, :public])
     Logger.info "number_of_retweet_kv created"
     {:ok, state}
   end
@@ -30,43 +30,41 @@ defmodule Twittoo.Ets do
       {:update_counter, table, key} ->
         {:reply, update_counter(table, key), :updating}
       {:select, table, matchspec} ->
-        {:reply, select(table, key), :selecting}
+        {:reply, select(table, matchspec), :selecting}
       {:select_limit, table, matchspec, limit} ->
-        {:reply, select_limit(table, key, limit), :limit_selecting}  
+        {:reply, select_limit(table, matchspec, limit), :limit_selecting}
       {_,_} -> Logger.info "handle_call unmatched any cases"
     end
   end
 
   defp update_counter(table, key) do
-    Logger.info "genserver handle_call -> ets:update_counter into " <>table<> " table with key:" <> key
+    Logger.info "genserver handle_call -> ets:update_counter into "<>table<>" table with key:"<>key
     :ets.update_counter(String.to_atom(table), key, {2,1})
   end
 
   defp insert_counter(table, key, msg) do
-    Logger.info "genserver handle_call -> ets:insert into " <>table<> " table with key:value " <> key <> " : " <> msg
+    Logger.info "genserver handle_call -> ets:insert into "<>table<>" table with key:value "<>key<>" : "<>msg
     :ets.insert(String.to_atom(table), {key, String.to_integer(msg)})
   end
 
   defp insert(table, key, msg) do
-    Logger.info "genserver handle_call -> ets:insert into " <>table<> " table with key:value " <> key <> " : " <> msg
+    Logger.info "genserver handle_call -> ets:insert into "<>table<>" table with key:value "<>key<>" : "<>msg
     :ets.insert(String.to_atom(table), {key, msg})
   end
 
   defp lookup(table, key) do
-    Logger.info "genserver handle_call -> ets:lookup into " <>table<> " table with key: " <> key
+    Logger.info "genserver handle_call -> ets:lookup into "<>table<>" table with key: "<>key
     :ets.lookup(String.to_atom(table), key)
   end
 
   defp select(table, matchspec) do
     Logger.info "genserver handle_call -> ets:select/2 into " <>table<> " table with match_spec "
-    IO.inspect(matchspec,[])
-    :ets.select(table, matchspec)
+    :ets.select(String.to_atom(table), matchspec)
   end
 
   defp select_limit(table, matchspec, limit) do
-    Logger.info "genserver handle_call -> ets:select/3 into " <>table<> " table with match_spec "
-    IO.inspect(matchspec,[])
-    :ets.select(table, matchspec, String.to_integer(limit))
+    Logger.info "genserver handle_call -> ets:select/3 into "<>table<>" table with match_spec "
+    :ets.select(String.to_atom(table), matchspec, String.to_integer(limit))
   end
 
   def put(msg) do

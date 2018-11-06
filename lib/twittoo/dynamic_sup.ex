@@ -1,6 +1,6 @@
 defmodule DynamicSup do
   use DynamicSupervisor
-  
+
   def start_link(arg) do
     DynamicSupervisor.start_link(__MODULE__, arg, name: __MODULE__)
   end
@@ -10,6 +10,7 @@ defmodule DynamicSup do
     spec = %{id: Twittoo.Ets, start: {Twittoo.Ets, :start_link, []}}
     #spec = {MyWorker, foo: foo, bar: bar, baz: baz}
     DynamicSupervisor.start_child(__MODULE__, spec)
+
   end
 
   @impl true
