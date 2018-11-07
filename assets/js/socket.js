@@ -4,6 +4,7 @@
 // To use Phoenix channels, the first step is to import Socket
 // and connect at the socket path in "lib/web/endpoint.ex":
 import {Socket} from "phoenix"
+import * as cookie from "./play"
 
 let socket = new Socket("/tweet", {params: {token: window.userToken}})
 
@@ -61,6 +62,7 @@ let retweet_channel = socket.channel("retweet:", {})
 let tweetbtn = document.getElementById("tweetbtn").addEventListener("click", function(){
     channel.push("new_msg", {body: document.getElementById('txtarea').value})
     document.getElementById('txtarea').value = ""
+    
 });
 
 let messagesContainer = document.getElementById("tweet-panel")

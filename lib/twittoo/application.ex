@@ -7,8 +7,11 @@ defmodule Twittoo.Application do
     import Supervisor.Spec
 
     # Define workers and child supervisors to be supervised
-     DynamicSup.start_link([])
-     DynamicSup.start_child
+    DynamicSup.start_link([])
+    DynamicSup.start_child
+
+    ViewSup.start_link([])
+    ViewSup.start_child
 
     children = [
       # Start the Ecto repository
@@ -30,7 +33,8 @@ defmodule Twittoo.Application do
     Supervisor.start_link(children, opts)
     #Twittoo.Ets.start_link
 
-
+    TimeSup.start_link([])
+    TimeSup.start_child
 
   end
 

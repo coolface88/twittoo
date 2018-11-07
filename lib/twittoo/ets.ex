@@ -19,7 +19,8 @@ defmodule Twittoo.Ets do
   end
 
   def handle_call(request, _from, _state) do
-    Logger.info "genserver handle_call callback in"
+    Logger.info "Twittoo.Ets::genserver handle_call callback in"
+
     case request do
       {:insert, table, key, msg} ->
         {:reply, insert(table, key, msg), :inserting}

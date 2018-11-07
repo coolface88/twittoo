@@ -1,6 +1,8 @@
 defmodule TweetContext.Tweet do
   require Logger
   alias Twittoo.Ets, as: Ets
+  alias RetweetContext.Retweet, as: Retweet
+  alias Twittoo.ReadStore, as: Read
 
   def store_tweet(tweet) do
     Logger.info "::TweeContext.Tweet.store_tweet "
@@ -53,17 +55,18 @@ defmodule TweetContext.Tweet do
     select = {:select, "number_of_retweet_kv", matchspec}
     IO.inspect(Ets.put(select),[])
 
-    sort_tweet()
+    s = sort_tweet()
 
+
+    Read.new(s) |> IO.inspect()
+    Read.append(s) |> IO.inspect()
+    Read.count |> IO.inspect()
+    Read.new(s) |> IO.inspect()
+    Read.count |> IO.inspect()
   end
 
   def sort_tweet() do
-    matchspec = [{{:"$1",:"$2"}, [], [:"$_"]}]
-    select = {:select, "number_of_retweet_kv", matchspec}
-    result = Ets.put(select)
-    sorted = Enum.sort_by(result, &elem(&1,1), &>=/2)
-    IO.inspect(sorted,[])
-    keys = Enum.flat_map(sorted, fn x -> [elem(x,0)] end)
+    keys = Retweet.retweet_sort_by_value()
     IO.inspect(Enum.flat_map(keys, fn x -> Ets.put({:select, "tweet_kv", [{{x,:"$2"}, [], [:"$_"]}]}) end))
   end
 

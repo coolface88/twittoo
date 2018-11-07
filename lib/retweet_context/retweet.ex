@@ -9,7 +9,10 @@ defmodule RetweetContext.Retweet do
     IO.inspect(Ets.put(t),[])
   end
 
-  def retweet_sort_by(result) do
+  def retweet_sort_by_value() do
+    matchspec = [{{:"$1",:"$2"}, [], [:"$_"]}]
+    select = {:select, "number_of_retweet_kv", matchspec}
+    result = Ets.put(select)
     sorted = Enum.sort_by(result, &elem(&1,1), &>=/2)
     Enum.flat_map(sorted, fn x -> [elem(x,0)] end)
   end
