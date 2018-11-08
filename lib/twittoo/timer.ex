@@ -1,7 +1,7 @@
 defmodule Twittoo.Timer do
   use GenServer, id: Twittoo.Timer
-  alias TweetContext.Tweet, as: Tweet
   alias Twittoo.ReadStore, as: ReadStore
+  alias ViewContext.Aggregation, as: Aggregation
   require Logger
 
   def start_link(_opts) do
@@ -28,11 +28,10 @@ defmodule Twittoo.Timer do
   def handle_info(:sort_the_tweet, _state) do
     # Do the work you desire here
     Logger.info "The tweets sorting process is triggered and then update the read store of view aggregation every 60sec"
-    result = Tweet.sort_tweet()
+    result = Aggregation.sort_tweet()
     ReadStore.new(result)
     # Start the timer again
     timer = Process.send_after(self(), :sort_the_tweet, 60_000)
-
     {:noreply, %{timer: timer}}
   end
 

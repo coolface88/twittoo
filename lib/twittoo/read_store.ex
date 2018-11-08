@@ -18,6 +18,10 @@ defmodule Twittoo.ReadStore do
     GenServer.call(__MODULE__, {:count})
   end
 
+  def page(num) do
+    GenServer.call(__MODULE__, {:page, num})
+  end
+
   ## Server Callbacks
 
   def init(:ok) do
@@ -35,6 +39,8 @@ defmodule Twittoo.ReadStore do
         {:reply, list ++ msg, list ++ msg}
       {:count} ->
         {:reply, Enum.count(list), list}
+      {:page, num} ->
+        {:reply, Enum.slice(list, num * 10, 10), list}
       {_,_} -> Logger.info "handle_call unmatched any cases"
     end
   end

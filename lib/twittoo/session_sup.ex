@@ -1,4 +1,4 @@
-defmodule TimeSup do
+defmodule SessionSup do
   use DynamicSupervisor
 
   def start_link(arg) do
@@ -7,7 +7,7 @@ defmodule TimeSup do
 
   def start_child do
     # If MyWorker is not using the new child specs, we need to pass a map:
-    spec = %{id: Twittoo.Timer, start: {Twittoo.Timer, :start_link, []}}
+    spec = %{id: Twittoo.SessionStore, start: {Twittoo.SessionStore, :start_link, []}}
     #spec = {MyWorker, foo: foo, bar: bar, baz: baz}
     DynamicSupervisor.start_child(__MODULE__, spec)
   end

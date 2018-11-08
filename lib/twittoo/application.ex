@@ -1,12 +1,16 @@
 defmodule Twittoo.Application do
   use Application
-
+  require Logger
   # See https://hexdocs.pm/elixir/Application.html
   # for more information on OTP Applications
   def start(_type, _args) do
     import Supervisor.Spec
 
     # Define workers and child supervisors to be supervised
+
+    SessionSup.start_link([])
+    SessionSup.start_child
+
     DynamicSup.start_link([])
     DynamicSup.start_child
 

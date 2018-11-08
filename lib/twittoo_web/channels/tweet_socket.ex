@@ -4,6 +4,7 @@ defmodule TwittooWeb.TweetSocket do
   ## Channels
   channel "tweet:*", TwittooWeb.TweetChannel
   channel "retweet:*", TwittooWeb.RetweetChannel
+  channel "display:*", TwittooWeb.DisplayChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

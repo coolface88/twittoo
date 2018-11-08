@@ -59,10 +59,14 @@ let channel = socket.channel("tweet:", {})
 
 let retweet_channel = socket.channel("retweet:", {})
 
+let display_channel = socket.channel("display:", {})
+
 let tweetbtn = document.getElementById("tweetbtn").addEventListener("click", function(){
-    channel.push("new_msg", {body: document.getElementById('txtarea').value})
+    var val = document.getElementById('txtarea').value
+    if (val != "") {
+       channel.push("new_msg", {body: val})
+    }
     document.getElementById('txtarea').value = ""
-    
 });
 
 let messagesContainer = document.getElementById("tweet-panel")
@@ -70,9 +74,48 @@ let messagesContainer = document.getElementById("tweet-panel")
 channel.on("new_msg", payload => {
   //let messageItem = document.createElement("li")
   //messageItem.innerText = `[${Date()}] ${payload.body}`
+  //let innerTxt = `${payload.body}`
+  //messagesContainer.appendChild(innerTxt)
+
+  console.log("dvdfgdf new msg ")
+
+})
+
+channel.on("abc", payload => {
+  //let messageItem = document.createElement("li")
+  //messageItem.innerText = `[${Date()}] ${payload.body}`
+  //let innerTxt = `${payload.body}`
+  //messagesContainer.appendChild(innerTxt)
+  console.log("dvdfgdf sdjgsfjs sjdfjdsfgds msg ")
+})
+
+channel.on("new_num_page", payload => {
+
+  val = `${payload.body}`
+  cookie.setCookie("totalpages", val, 1)
+  c = cookie.getCookie("totalpages")
+  console.log(c)
+  //let innerTxt = `${payload.body}`
+  //messagesContainer.appendChild(innerTxt)
+})
+
+retweet_channel.on("new_msg", payload => {
+  //let messageItem = document.createElement("li")
+  //messageItem.innerText = `[${Date()}] ${payload.body}`
   let innerTxt = `${payload.body}`
   messagesContainer.appendChild(innerTxt)
 })
+
+display_channel.on("new_msg", payload => {
+  //let messageItem = document.createElement("li")
+  //messageItem.innerText = `[${Date()}] ${payload.body}`
+  let innerTxt = `${payload.body}`
+  messagesContainer.appendChild(innerTxt)
+})
+
+display_channel.join()
+  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("error", resp => { console.log("Unable to join", resp) })
 
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
@@ -81,5 +124,8 @@ channel.join()
 retweet_channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })
   .receive("error", resp => { console.log("Unable to join", resp) })
+
+
+
 
 export default socket
