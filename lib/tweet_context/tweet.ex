@@ -2,8 +2,8 @@ defmodule TweetContext.Tweet do
   require Logger
   alias Twittoo.Ets, as: Ets
   alias Twittoo.ReadStore, as: Read
-  alias ViewContext.Aggregation, as: Aggr
   alias Twittoo.SessionStore, as: SessionStore
+  alias ViewContext.Aggregation, as: Aggregation
 
   def store_tweet(tweet) do
     Logger.info "::TweeContext.Tweet.store_tweet "
@@ -14,7 +14,6 @@ defmodule TweetContext.Tweet do
     r = {:insert_counter, "number_of_retweet_kv", key1, "0"}
     IO.inspect(Ets.put(r),[])
 
-
     matchspec = [{{:"$1",:"$2"}, [], [:"$_"]}]
     select = {:select, "tweet_kv", matchspec}
     IO.inspect(Ets.put(select),[])
@@ -24,6 +23,16 @@ defmodule TweetContext.Tweet do
     Ets.put(select) |> IO.inspect
 
     SessionStore.get_current_page |> IO.inspect
+
+    list = Aggregation.get_top_ten() |> IO.inspect
+
+
+  end
+
+  def count() do
+    matchspec = [{{:"$1",:"$2"}, [], [:"$_"]}]
+    select = {:select_count, "number_of_retweet_kv", matchspec}
+    Ets.put(select) |> IO.inspect
   end
 
   def get_all() do

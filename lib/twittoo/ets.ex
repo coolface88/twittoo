@@ -89,7 +89,8 @@ defmodule Twittoo.Ets do
 
   defp select_count(table, matchspec) do
     Logger.info "genserver handle_call -> ets:select_count/2 from " <>table<> " table with match_spec "
-    :ets.select_count(String.to_atom(table), matchspec)
+    list = :ets.select(String.to_atom(table), matchspec)
+    Enum.count(list)
   end
 
   defp select_limit(table, matchspec, limit) do

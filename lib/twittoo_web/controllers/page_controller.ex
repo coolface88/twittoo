@@ -1,11 +1,13 @@
 defmodule TwittooWeb.PageController do
   use TwittooWeb, :controller
   alias Twittoo.SessionStore, as: SessionStore
+  alias ViewContext.Aggregation, as: Aggregation
 
   def index(conn, _params) do
-    #render conn, "index.html"
+    # This is a very simple session to store current page state.
+    # Cookies / Session plug cannot cope with socket and http connection contxt combined
     SessionStore.new(0)
-    #text conn, body
+    
     render conn, "index.html"
   end
 

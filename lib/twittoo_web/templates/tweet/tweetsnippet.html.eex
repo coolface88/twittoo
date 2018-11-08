@@ -2,11 +2,11 @@
   <a class="media-left" href="#fake">
     <img alt="" class="media-object img-rounded" src="http://placehold.it/64x64">
   </a>
-  <div class="media-body">
+  <div id="<%= @data.key %>" class="media-body">
     <h4 class="media-heading">Media heading</h4>
-    <p id="tweetmsg">Dolorem aspernatur rerum, iure? Culpa iste aperiam sequi, fuga, quasi rerum, eum, quo natus tenetur officia placeat.</p>
+    <p id="tweetmsg"><%= @data.value %></p>
     <ul class="nav nav-pills nav-pills-custom">
-      <li><a href="#"><span class="glyphicon glyphicon-retweet"></span></a></li>
+      <li><button><span class="glyphicon glyphicon-retweet"></span></button></li>
     </ul>
   </div>
 </div>
