@@ -18,7 +18,7 @@
 					</div>
 				</div>
 				<div id="tweet-panel" class="panel-body">
-          
+          <%= render TwittooWeb.TweetView, "tweetsnippet.html", assigns %>
 				</div>
 			</div>
 			<br>
